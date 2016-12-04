@@ -57,6 +57,9 @@ class DataManager: NSObject {
         else {
             currentLocation = CLLocation(latitude: 37.868485, longitude: -122.26385)
         }
+        while (currentLocation == nil) {
+            currentLocation = self.locationManager.location
+        }
         
         let lat = Double((currentLocation?.coordinate.latitude)!)
         let lon = Double((currentLocation?.coordinate.longitude)!)

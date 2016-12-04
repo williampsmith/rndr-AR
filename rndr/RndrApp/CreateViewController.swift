@@ -126,6 +126,9 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
         else {
             location = CLLocation(latitude: 37.868485, longitude: -122.26385)
         }
+        while (location == nil) {
+            location = self.locationManager.location
+        }
         
         let lat = Double((location?.coordinate.latitude)!)
         let lon = Double((location?.coordinate.longitude)!)

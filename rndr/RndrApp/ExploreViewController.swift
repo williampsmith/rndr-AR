@@ -24,6 +24,9 @@ class ExploreViewController: UIViewController, CLLocationManagerDelegate {
         else {
             currentLocation = CLLocation(latitude: 37.868485, longitude: -122.26385)
         }
+        while (currentLocation == nil) {
+            currentLocation = self.locationManager.location
+        }
         
         // Create a GMSCameraPosition that tells the map to display the
         // coordinate -33.86,151.20 at zoom level 6.
