@@ -1,0 +1,6 @@
+framework module Pods_RndrApp {
+  umbrella header "Pods-RndrApp-umbrella.h"
+
+  export *
+  module * { export * }
+}
