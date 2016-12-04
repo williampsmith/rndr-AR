@@ -8,8 +8,13 @@
 //
 
 import UIKit
+import CoreLocation
+
+
 
 class CreateViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+    
+    var locationManager = CLLocationManager()
     
     // MARK: Properties
     @IBOutlet weak var postImageView: UIImageView!
@@ -28,6 +33,8 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(CreateViewController.didTapView))
         self.view.addGestureRecognizer(tapRecognizer)
+        
+       
     }
     
     override func didReceiveMemoryWarning() {
@@ -104,9 +111,30 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     // MARK: Actions
     
     @IBAction func postButtonPressed(_ sender: Any) {
+        //todo: remove me. for testing only
+//        var location : CLLocation? = CLLocation(latitude: 37.868485, longitude: -122.26385)
+        
+        // todo: FIXME!!!!!!!
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        var location = self.locationManager.location
+        
+        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorized) {
+            location = self.locationManager.location
+        }
+        else {
+            location = CLLocation(latitude: 37.868485, longitude: -122.26385)
+        }
+        
+        let lat = Double((location?.coordinate.latitude)!)
+        let lon = Double((location?.coordinate.longitude)!)
+        
+        print("Lat and long: \(lat), \(lon)")
+        
         let dataManager = DataManager()
         //dataManager.changeMetadataAsync(newMetadata: "1")
-        let currentLocation = [33.0, 33.0] //todo: updte from CoreLocation
+        let currentLocation = [lat, lon] //todo: updte from CoreLocation
         let currentTime = 0 //todo: fix me
         let newPost = Post(author : "William2", time : currentTime, type : .text, text: postTextField.text as NSString, url : "", location : currentLocation, marker : "William")
         

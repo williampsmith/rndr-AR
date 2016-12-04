@@ -8,8 +8,12 @@
 
 import UIKit
 import Foundation
+import CoreLocation
+
 
 class DataManager: NSObject {
+    var locationManager = CLLocationManager()
+    var nearbyPosts : [Post] = []
     
     func changeMetadataAsync(newMetadata: String) {
         var request = URLRequest(url: URL(string: "https://rndr-cal-hacks.azurewebsites.net/target")!)
@@ -39,17 +43,25 @@ class DataManager: NSObject {
             }.resume()
 
     }
-    
-    func getLocation() {
-        
-    }
 
     
     func retieveNearbyPosts() {
-        //todo: Get current location
-        // Right now it's hardcoded.
-        let lat = 20.0
-        let lon = 20.0
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        var currentLocation : CLLocation!
+        
+        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorized) {
+            currentLocation = self.locationManager.location
+        }
+        else {
+            currentLocation = CLLocation(latitude: 37.868485, longitude: -122.26385)
+        }
+        
+        let lat = Double((currentLocation?.coordinate.latitude)!)
+        let lon = Double((currentLocation?.coordinate.longitude)!)
+        
+        print("Lat and long: \(lat), \(lon)")
         
         let headers = [
             "cache-control": "no-cache"
@@ -68,50 +80,50 @@ class DataManager: NSObject {
                 return
             }
             
-            let json = try! JSONSerialization.jsonObject(with: data, options: [])
+            var json = try! JSONSerialization.jsonObject(with: data, options: [])
             print("The following is the retrieved nearby posts:")
             print(json)
             
-            // convert json into post objects here
+            
+            let jsonArr = try! JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! NSArray
+            
+            for js in jsonArr {
+                // create new Post object
+                var tempPost = Post(author: "", time: 0, type: .text, text: "", url: "", location: [0,0, 0,0], marker: "")
+                
+                // parse JSON and populate post object
+                if let jsDict = js as? NSDictionary {
+                    if let author = jsDict["author"] as? NSString {
+                        tempPost.author = author
+                    }
+                    if let type = jsDict["type"] as? NSString {
+                        tempPost.type = Post.PostType(rawValue: String(type))!
+                    }
+                    if let text = jsDict["text"] as? NSString {
+                        tempPost.text = text
+                    }
+                    if let url = jsDict["url"] as? NSString {
+                        tempPost.url = url
+                    }
+                    if let location = jsDict["location"] as? NSArray {
+                        tempPost.location = location as! [Double]
+                    }
+                    if let marker = jsDict["marker"] as? NSString {
+                        tempPost.marker = marker
+                    }
+                }
+                
+                self.nearbyPosts.append(tempPost)
+            }
+            
+            print("\n\nSize of nearby posts: \(self.nearbyPosts.count)\n\n")
         }
         
         task.resume()
     }
     
     func savePost(newPost: Post) {
-//        let url = URL(string: "https://rndrapp.herokuapp.com/posts/")
-//        var request = URLRequest(url: url!)
-//        
-//        let postString = "author=\(newPost.author)&type=\(newPost.type)&text=\(newPost.text)&url=&location=[\(newPost.location[0]),\(newPost.location[1])]&marker=ID"
-//        
-//        print("Post String: \(postString)")
-//        
-//        request.httpBody = postString.data(using: .utf8)
-//        print("http body: \(request.httpBody!)")
-//        
-//        // check for fundamental networking errors
-//        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-//            guard error == nil else {
-//                print("error = \(error)")
-//                return
-//            }
-//            guard let data = data else {
-//                print("Data is empty")
-//                return
-//            }
-//            
-//            // check for http errors
-//            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-//                print("statusCode should be 200, but is \(httpStatus.statusCode)")
-//                print("response = \(response)")
-//            }
-//            
-//            let responseString = String(data: data, encoding: .utf8)
-//            print("responseString = \(responseString)")
-//        }
-//        
-//        // todo: uncomment me later!
-//        task.resume()
+        
         var request = URLRequest(url: URL(string: "https://rndrapp.herokuapp.com/post/")!)
         request.httpMethod = "POST"
         
