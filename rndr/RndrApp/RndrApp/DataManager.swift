@@ -45,7 +45,7 @@ class DataManager: NSObject {
     }
 
     
-    func retieveNearbyPosts() {
+    func retrieveNearbyPosts() {
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         var currentLocation : CLLocation!
@@ -120,6 +120,8 @@ class DataManager: NSObject {
             }
             
             print("\n\nSize of nearby posts: \(self.nearbyPosts.count)\n\n")
+            let testPost = self.nearbyPosts[0]
+            print("\n\ntest post location: \(testPost.location)\n\n")
         }
         
         task.resume()

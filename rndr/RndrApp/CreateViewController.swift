@@ -9,7 +9,7 @@
 
 import UIKit
 import CoreLocation
-
+import Firebase
 
 
 class CreateViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {

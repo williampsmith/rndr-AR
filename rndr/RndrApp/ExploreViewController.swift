@@ -40,13 +40,17 @@ class ExploreViewController: UIViewController, CLLocationManagerDelegate {
         //////////// EXAMPLE CODE FOR QUERYING THE DATABASE /////////////
         var markerPositions : [CLLocation] = []
         var dataManager = DataManager()
-        dataManager.retieveNearbyPosts()
+        dataManager.retrieveNearbyPosts()
         
+        print("\n\n --------Populating nearby posts------- \n\n")
+        print("Number of posts nearby: \(dataManager.nearbyPosts.count)")
         for var post in dataManager.nearbyPosts {
-            let lat = post.location[0]
-            let lon = post.location[1]
+            let lat = Double(post.location[0])
+            let lon = Double(post.location[1])
+            print("location[0]: \(lat), \(lon)")
+            print("data type: \(type(of: lat))\n\n")
             markerPositions.append(CLLocation(latitude: lat, longitude: lon))
-            print("\n\nLat long from retrieved posts for map view: \(lat), \(lon)")
+            //print("\n\nLat long from retrieved posts for map view: \(lat), \(lon)")
         }
         
 //        let markerPositions : [CLLocation] = [CLLocation(latitude: 37.868485, longitude: -122.263885),
@@ -64,7 +68,6 @@ class ExploreViewController: UIViewController, CLLocationManagerDelegate {
             marker.title = "Sydney"
             marker.snippet = "Australia"
             marker.map = mapView
-            
         }
         
         // Do any additional setup after loading the view.
