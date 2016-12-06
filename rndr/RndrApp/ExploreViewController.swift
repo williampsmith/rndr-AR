@@ -15,7 +15,6 @@ class ExploreViewController: UIViewController, CLLocationManagerDelegate, DataMa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view = mapView
         
         self.locationManager.delegate = self
         self.dataManager.delegate = self
@@ -32,6 +31,7 @@ class ExploreViewController: UIViewController, CLLocationManagerDelegate, DataMa
         // todo: uncomment after testing
         let camera = GMSCameraPosition.camera(withLatitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude, zoom: 15.0)
         mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+        view = mapView
         
         // request location service and update asynchronously
         if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
@@ -108,6 +108,7 @@ class ExploreViewController: UIViewController, CLLocationManagerDelegate, DataMa
             let camera = GMSCameraPosition.camera(withLatitude: currentLocation.coordinate.latitude, longitude: currentLocation.coordinate.longitude, zoom: 15.0)
             mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
             mapView.isMyLocationEnabled = true
+            view = mapView
             
             mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.new, context: nil)
             

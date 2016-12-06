@@ -128,8 +128,13 @@ class DataManager: NSObject {
             // call delegate
             
             print("\n\nSize of nearby posts: \(self.nearbyPosts.count)\n\n")
-            let testPost = self.nearbyPosts[0]
-            print("\n\ntest post location: \(testPost.location)\n\n")
+            if jsonArr.count > 0 {
+                let testPost = self.nearbyPosts[0]
+                print("\n\ntest post location: \(testPost.location)\n\n")
+            }
+            else {
+                print("\n\nNo nearbly posts.\n\n")
+            }
             
             self.delegate?.didRetrieveNearbyPosts(sender: self)
         }
