@@ -43,8 +43,10 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         initialLoad = true
         
-        // for testing
-        self.updates = [Update(name : "Will", distance: 2.0), Update(name : "Georgy", distance : 5.1), Update(name : "Bryce", distance : 1.1), Update(name: "Gera", distance : 0.4)] // for hacking only
+        // for testing only
+        self.updates = [Update(name : "Will", distance: 2.0), Update(name : "Georgy", distance : 5.1), Update(name : "Bryce", distance : 1.1), Update(name: "Gera", distance : 0.4)]
+        
+        self.updates.sort(by: { s1, s2 in return s1.distance < s2.distance})
 
         dataManager.delegate = self
         locationManager.delegate = self
@@ -152,7 +154,8 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             self.updates.append(newUpdate)
         }
-        // Jhalak : Please implement the rest of this. All that needs to happen is the tableView delegates need to be called again or whatever so that it repopulates the cells with the updated data. If this function is called, it means that the delegation has returned with the nearby post data and the update array is populated, so the data should be there.
+        self.updates.sort(by: { s1, s2 in return s1.distance < s2.distance})
+        self.tableView.reloadData()
     }
     
     
