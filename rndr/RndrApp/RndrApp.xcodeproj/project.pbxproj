@@ -28,14 +28,18 @@
 		3D09A4C71DD823760062D4F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D09A4C51DD823760062D4F5 /* GoogleService-Info.plist */; };
 		3D09A4C81DD823760062D4F5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D09A4C51DD823760062D4F5 /* GoogleService-Info.plist */; };
 		3D09A4D41DD87E1F0062D4F5 /* ExplorerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4D31DD87E1F0062D4F5 /* ExplorerViewController.swift */; };
+		3D1BC3271DF6BE2B00DD5D5F /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4BF1DD7DCBC0062D4F5 /* DataManager.swift */; };
+		3D1BC3281DF6BE2C00DD5D5F /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4BF1DD7DCBC0062D4F5 /* DataManager.swift */; };
+		3D1BC3291DF6BF2E00DD5D5F /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4BD1DD7DC2C0062D4F5 /* Post.swift */; };
+		3D1BC32A1DF6BF2F00DD5D5F /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4BD1DD7DC2C0062D4F5 /* Post.swift */; };
+		3D1BC32B1DF6C93400DD5D5F /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4B91DD7CD600062D4F5 /* StatusViewController.swift */; };
+		3D1BC32C1DF6C93500DD5D5F /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4B91DD7CD600062D4F5 /* StatusViewController.swift */; };
 		6A19546B1DF1266500CFC571 /* ViewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A19546A1DF1266500CFC571 /* ViewPostViewController.swift */; };
 		6A19546C1DF1266500CFC571 /* ViewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A19546A1DF1266500CFC571 /* ViewPostViewController.swift */; };
 		6A19546D1DF1266500CFC571 /* ViewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A19546A1DF1266500CFC571 /* ViewPostViewController.swift */; };
 		6A19546F1DF1328300CFC571 /* trending_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A19546E1DF1328300CFC571 /* trending_icon.png */; };
 		6A1954701DF1328300CFC571 /* trending_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A19546E1DF1328300CFC571 /* trending_icon.png */; };
 		6A1954711DF1328300CFC571 /* trending_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A19546E1DF1328300CFC571 /* trending_icon.png */; };
-		6A19547E1DF2592B00CFC571 /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4B91DD7CD600062D4F5 /* StatusViewController.swift */; };
-		6A19547F1DF2592C00CFC571 /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4B91DD7CD600062D4F5 /* StatusViewController.swift */; };
 		6A1954801DF25E6400CFC571 /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4C31DD8023A0062D4F5 /* StatusTableViewCell.swift */; };
 		6A1954811DF25E6400CFC571 /* StatusTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4C31DD8023A0062D4F5 /* StatusTableViewCell.swift */; };
 		6A1954871DF3549600CFC571 /* explore_tab.png in Resources */ = {isa = PBXBuildFile; fileRef = 6A1954841DF3549600CFC571 /* explore_tab.png */; };
@@ -583,9 +587,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D09A4851DD7A93C0062D4F5 /* RndrAppTests.swift in Sources */,
-				6A19547E1DF2592B00CFC571 /* StatusViewController.swift in Sources */,
+				3D1BC3271DF6BE2B00DD5D5F /* DataManager.swift in Sources */,
 				6A19546C1DF1266500CFC571 /* ViewPostViewController.swift in Sources */,
 				6A1954801DF25E6400CFC571 /* StatusTableViewCell.swift in Sources */,
+				3D1BC32B1DF6C93400DD5D5F /* StatusViewController.swift in Sources */,
+				3D1BC3291DF6BF2E00DD5D5F /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,9 +600,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				3D09A4901DD7A93C0062D4F5 /* RndrAppUITests.swift in Sources */,
-				6A19547F1DF2592C00CFC571 /* StatusViewController.swift in Sources */,
+				3D1BC3281DF6BE2C00DD5D5F /* DataManager.swift in Sources */,
 				6A19546D1DF1266500CFC571 /* ViewPostViewController.swift in Sources */,
 				6A1954811DF25E6400CFC571 /* StatusTableViewCell.swift in Sources */,
+				3D1BC32C1DF6C93500DD5D5F /* StatusViewController.swift in Sources */,
+				3D1BC32A1DF6BF2F00DD5D5F /* Post.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

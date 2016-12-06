@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class Update {
     var name : String = ""
@@ -19,7 +20,13 @@ class Update {
     }
 }
 
-class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, DataManagerDelegate, CLLocationManagerDelegate {
+    
+    var initialLoad = true // ensures location updates do not continuously call DataManager delegates
+    
+    var dataManager = DataManager()
+    var locationManager = CLLocationManager()
+    var currentLocation = CLLocation(latitude: 10.0, longitude: 10.0)
     
     //MARK: Properties
     var trendingSelected = true
@@ -28,20 +35,39 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     
     //some sample data to populate the tableview
-    var updates : [Update] = [Update(name : "Will", distance: 2.0), Update(name : "Georgy", distance : 5.1), Update(name : "Bryce", distance : 1.1), Update(name: "Gera", distance : 0.4)] // for hacking only
-
+    var updates : [Update] = []
     var savedPosts = [Update]() //will save removed posts from discover tab
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        initialLoad = true
+        
+        // for testing
+        self.updates = [Update(name : "Will", distance: 2.0), Update(name : "Georgy", distance : 5.1), Update(name : "Bryce", distance : 1.1), Update(name: "Gera", distance : 0.4)] // for hacking only
+
+        dataManager.delegate = self
+        locationManager.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
+        
         let leftImage = UIImage(named: "trending_icon.png")
         let rightImage = UIImage(named: "friends.png")
         segmentedControl.setImage(leftImage, forSegmentAt: 0)
         segmentedControl.setImage(rightImage, forSegmentAt: 1)
-
+        
+        // location handling
+        self.locationManager.requestWhenInUseAuthorization()
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
+            CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorized) {
+            locationManager.requestLocation() // this will call delegate when retrieved
+        }
+        else {
+            print("\n\nError: Not authorized to retrieve location data. Using default location for post retrieval.\n\n")
+            self.dataManager.retrieveNearbyPosts()
+        }
     }
 
     //give options when swiping to the side on a UItableViewCell
@@ -111,7 +137,23 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
+    func getDistance(location : [Double]) -> Double {
+        // Jhalak: Please implement this. Simply returns the distance between current location and provided location. Current location is already accessible by self.currentLocation
+        
+        return 1.0 // default value
+    }
     
+    func didRetrieveNearbyPosts(sender: DataManager) {
+        self.updates = []
+        
+        for var post in dataManager.nearbyPosts {
+            let distance = self.getDistance(location: post.location)
+            let newUpdate = Update(name : post.author as String, distance: distance)
+            
+            self.updates.append(newUpdate)
+        }
+        // Jhalak : Please implement the rest of this. All that needs to happen is the tableView delegates need to be called again or whatever so that it repopulates the cells with the updated data. If this function is called, it means that the delegation has returned with the nearby post data and the update array is populated, so the data should be there.
+    }
     
     
     // MARK: TableView Functions
@@ -142,7 +184,10 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "trendingCell", for: indexPath) as! StatusTableViewCell
+        
+        // initial value
         var currentUpdate = Update(name:"",distance:0)
+        
         if self.trendingSelected {
             currentUpdate = updates[indexPath.row]
         } else {
@@ -155,6 +200,21 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
+    // Mark: CLLocationManagerDelegate methods
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        if initialLoad {
+            initialLoad = false
+            
+            self.currentLocation = locations[0] // todo: check index assumptions
+            dataManager.retrieveNearbyPosts()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("\n\nFailed to get location. Error: \(error)\n\n")
+    }
     
     
     // MARK: Actions

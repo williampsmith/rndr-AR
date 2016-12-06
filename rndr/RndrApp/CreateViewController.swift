@@ -12,9 +12,11 @@ import CoreLocation
 import Firebase
 
 
-class CreateViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
+class CreateViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate, CLLocationManagerDelegate {
     
     var locationManager = CLLocationManager()
+    var dataManager = DataManager()
+    var location : CLLocation = CLLocation()
     
     // MARK: Properties
     @IBOutlet weak var postImageView: UIImageView!
@@ -23,18 +25,22 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     var imagePicker = UIImagePickerController()
     var edits = false
+    var initialLoad = true // ensures location updates do not continuously call DataManager delegates
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        initialLoad = true
+        
         imagePicker.delegate = self
         postTextField.delegate = self
+        self.locationManager.delegate = self
+        
         registerForKeyboardNotifications()
         let tapRecognizer = UITapGestureRecognizer()
         tapRecognizer.addTarget(self, action: #selector(CreateViewController.didTapView))
         self.view.addGestureRecognizer(tapRecognizer)
-        
-       
     }
     
     override func didReceiveMemoryWarning() {
@@ -117,32 +123,45 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
         // todo: FIXME!!!!!!!
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        var location = self.locationManager.location
+        
+        // default location
+        self.location = CLLocation(latitude: 37.868485, longitude: -122.26385)
         
         if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorizedWhenInUse ||
             CLLocationManager.authorizationStatus() == CLAuthorizationStatus.authorized) {
-            location = self.locationManager.location
+            self.locationManager.requestLocation()
         }
         else {
-            location = CLLocation(latitude: 37.868485, longitude: -122.26385)
-        }
-        while (location == nil) {
-            location = self.locationManager.location
+            print("\n\nError: Not authorized to retrieve location data. Using default location for post retrieval.\n\n")
+            self.dataManager.retrieveNearbyPosts()
         }
         
-        let lat = Double((location?.coordinate.latitude)!)
-        let lon = Double((location?.coordinate.longitude)!)
-        
-        print("Lat and long: \(lat), \(lon)")
-        
-        let dataManager = DataManager()
-        //dataManager.changeMetadataAsync(newMetadata: "1")
-        let currentLocation = [lat, lon] //todo: updte from CoreLocation
-        let currentTime = 0 //todo: fix me
-        let newPost = Post(author : "William2", time : currentTime, type : .text, text: postTextField.text as NSString, url : "", location : currentLocation, marker : "William")
-        
-        dataManager.savePost(newPost: newPost)
-        print("Post button pushed. This is for debugging.")
+    }
+    
+    // Mark: CLLocationManagerDelegate methods
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if initialLoad {
+            initialLoad = false
+            
+            self.location = locations[0]
+            let lat = Double((location.coordinate.latitude))
+            let lon = Double((location.coordinate.longitude))
+            
+            print("\n\nPreparing for post. Location Lat and long: \(lat), \(lon)\n\n")
+            
+            //dataManager.changeMetadataAsync(newMetadata: "1")
+            let currentLocation = [lat, lon] //todo: updte from CoreLocation
+            let currentTime = 0 //todo: fix me
+            let newPost = Post(author : "William2", time : currentTime, type : .text, text: postTextField.text as NSString, url : "", location : currentLocation, marker : "William")
+            
+            dataManager.savePost(newPost: newPost)
+            print("Post button pushed. This is for debugging.")
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("\n\nFailed to get location. Error: \(error)\n\n")
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {

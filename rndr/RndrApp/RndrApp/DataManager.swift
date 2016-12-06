@@ -10,10 +10,16 @@ import UIKit
 import Foundation
 import CoreLocation
 
+protocol DataManagerDelegate : class {
+    func didRetrieveNearbyPosts(sender: DataManager)
+}
 
 class DataManager: NSObject {
     var locationManager = CLLocationManager()
     var nearbyPosts : [Post] = []
+    
+    // for asynchoronous data update
+    weak var delegate : DataManagerDelegate?
     
     func changeMetadataAsync(newMetadata: String) {
         var request = URLRequest(url: URL(string: "https://rndr-cal-hacks.azurewebsites.net/target")!)
@@ -119,9 +125,13 @@ class DataManager: NSObject {
                 self.nearbyPosts.append(tempPost)
             }
             
+            // call delegate
+            
             print("\n\nSize of nearby posts: \(self.nearbyPosts.count)\n\n")
             let testPost = self.nearbyPosts[0]
             print("\n\ntest post location: \(testPost.location)\n\n")
+            
+            self.delegate?.didRetrieveNearbyPosts(sender: self)
         }
         
         task.resume()
