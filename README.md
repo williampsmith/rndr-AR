@@ -1,99 +1,77 @@
-# officehours
+# RNDR
 
 ## Authors
-* William Smith 
+* William Smith
 * Jhalak Gurung
 * Robert Spark
 * Gera Groshev
 
 ## Purpose
-* officehours is an app that links learners and tutors in a social environment.
-	It combines a virtual shared whiteboard, with features such as image import 
-	and editing, and chat, with a social networking page that allows users to 
-	search for existing groups in any number of subjects, or create one if it 
-	doesn’t exist. Within these groups, users and content creators can post tutorial
-	links, ask questions in a q&a forum, or request one on one tutoring from a 
-	friend or a highly rated content creator. Content creators are ranked and 
-	reviewed by the users.
+* RNDR is an augmented social network. It allows users to post images and text
+	that are bound to a location. Other users can see these posts, but only if
+	they are close enough in proximity to the bound location of the post! This
+	thereby encourages users to physically explore their area! As an advanced
+	feature, RNDR supports Augmented Reality, allowing posts to be as 3D objects
+	embedded in the camera view, however support for this is currently limited.
 
 ## Features
-* Shared whiteboard
-* Importing photos and documents into whiteboard.
-* Whiteboard view chatroom.
-* Group creation and search.
-* Group Q&A forum.
-* Search by subject matter
-* Auto ranking of content creators.
-* Profile list sorted by rank
-* “Available” UI for profile widget (blue if available, else red)
-* Recommendation feature for users to rate private tutoring sessions.
-* Youtube API integration for posting videos in group forums
+* Discovery view for viewing posts nearby.
+* Map view for navigating to post locations.
+* Post view for creating posts.
+* Supports text and images currently.
+* Markers on map view pinned to post location.
+* Colored coded proximity tracking as a visual indicator of distance to a post.
+* Limited Augmented Reality View in iOS Camera against static image targets.
+* Augmented Reality view currently does not support dynamic post creation.
 
 ## Control Flow
-* Users are initially presented with the OAuth page, where new users will 
-	create accounts using Facebook or Twitter accounts.
+* Users are initially presented with the CreateView, where they can create a new
+	post. This is embedded in a Tab Bar Controller. The user can choose from
+	selecting a photo from their camera roll and/or posting text in a text box.
 
-* After login, the user will be presented with the main page, which is a Tab 
-	View Controller. The default tab in view will be the Explorer View, which 
-	inherits from Collection View Controller. The Explorer View will contain a 
-	listing of the most commonly searched for subject matters (Math, Computer 
-	Science, English), in the case of the new user, along with a ranking of the 
-	top tutors in each area. For a returning user, the explorer view will be 
-	populated with suggested groups. These group suggestions will be created 
-	based on commonly clustered group memberships among existing users.
+* The user can then optionally create a post here and post it, or switch to
+	another tab. Other tabs include ExploreView and StatusView.
 
-* Other tabs will include Search View and Dashboard View. 
+* ExploreView presents the user with a Google Maps view centered around their
+	location. This view generates an icon for the user's current location, and
+	markers for the locations of all nearby posts.
 
-* Search View: In search view, the user can search interests to find groups 
-	and tutors, as well as search content creators by profile name, or even their 
-	friends. The search page will populate results based on the search query, in a 
-	table view. The table View Cells will be populated with group widgets, or 
-	profile widgets. Profile widgets will be greyed out if the user is not online, 
-	green if the user is online and available, and red if the user is online and 
-	in a closed tutoring session. From the search results, users can request 
-	tutoring sessions from tutors, or join open groups. If the user joins a 
-	tutoring session, then the app will segue to the digital whiteboard. If the 
-	user selects a group, the group will be saved to the user’s dashboard account, 
-	and the user will be notified.
+* StatusView shows a TableView containing data of nearby posts. The user is
+	limited to metadata about the post, such as the author, and current distance
+	from the post origin, until the user becomes close enough to the post origin.
+	The distance to the post origin is indicated by a color code in the cell,
+	which ranges from light blue (cold), indicating far distances, to dark red
+	(hot), indicating the user is very close and the content is viewable. Once the
+	content is viewable, the user can select the cell and segue to a PostView.
 
-* Dashboard View: In the Dashboard view, the user can edit profile settings, 
-	such as username, “content creator” boolean (yes if the user is a content 
-	creator), and topics about which the user is knowledgeable (like on Quora). 
-	Additionally, the page will be populated with all of the groups for which the 
-	user is a member. If the user selects a group, the app will segue to the group 
-	page. The group page contents will contain content posted by member of the 
-	group, and a list of group members and content creators in that group category.
-
-* Whiteboard View: Whiteboard view will be entered upon two or more parties 
-	agreeing to a tutoring session, either from the Explorer View or a Group View. 
-	Whiteboard View will contain a blank canvas with the ability for the user to 
-	write directly. The user will be able to import photos to be displayed onto the 
-	canvas for editing, as well as chat with other users in the whiteboard session.
+* ARView shows a camera view, which is connected to a Vuforia backend with
+	image recognition capabilities and Unity 3D rendering. When the view of the
+	camera is placed over an object in the real world which the backend recognizes
+	as a post target, the associated post is shown in 3D, rendered in the camera
+	view.
 
 ## Implementation
 ### Model
-* userProfile (contains name, email address, list of group memberships, 
-	list of knowledge subjects), as well as globalProfileList (dictionary 
-	of username -> online)
+* Post Class -- encapsulates all post information, including author, location,
+	text, image URL, and post type. Persists in a Firebase Database, which is
+	accessed by a RESTful API implemented in Node.JS and hosted on Heroku.
 
-* groupData (contains names of all members, group purpose, dictionary of 
-	content), as well as globalGroupList
+* Target/ Object Data -- For the Augmented Reality View. Contains all pertinent
+	data for the 3D objects to be rendered, and the targets for image recognition.
+	Persists in the Vuforia provided database, and accessed directly from the
+	mobile client, as well as through a RESTful API implemented in Flask and
+	hosted on Google App Engine.
+
+* DataManager Class -- Object that handles data retrieval from the databases.
 
 ### View
-* LoginView
-* ExplorerView
-* GroupView
-* WhiteboardView
-* DashboardView
-* SearchView
+* ExploreView
+* StatusView
+* CreateView
+* ViewPostView
 
 ### Controller
-* LoginViewController
-* ExplorerViewController
-* GroupViewController
-* WhiteboardViewController
-* DashboardViewController
-* SearchViewController
-
-
-
+* ExploreViewController
+* StatusViewController
+* CreateViewController
+* ViewPostViewController
