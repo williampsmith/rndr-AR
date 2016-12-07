@@ -214,11 +214,9 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         //TODO: need to check if it works!
         if currentUpdate.closePost {
-            cell.backgroundColor = UIColor.red
-        } else if (currentUpdate.distance > 200 && currentUpdate.distance < 400 ) {
-            cell.backgroundColor = UIColor.lightGray
+            cell.backgroundColor = UIColor(red: 1.0, green: 51 / 255, blue: 51 / 255, alpha: 0.8)
         } else {
-            cell.backgroundColor = UIColor.blue
+            cell.backgroundColor = UIColor.lightGray
         }
         
         

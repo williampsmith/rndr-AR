@@ -24,6 +24,9 @@ class ViewPostViewController: UIViewController {
         self.setTitle.text = (self.post.author as String) + " 's post"
         self.textView.text = post.text as String
         
+        self.textView.font = UIFont(name: self.textView!.font!.fontName, size: 18)
+        self.textView.textAlignment = .center
+        
         let storageRef = FIRStorage.storage().reference(forURL: "gs://rndr-77d10.appspot.com")
         
         if self.post.type == .image {
