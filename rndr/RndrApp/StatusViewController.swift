@@ -13,10 +13,12 @@ class Update {
     var name : String = ""
     var distance : Double = 1.0
     var favorite = false
+    var closePost = false
     
-    init(name : String, distance : Double) {
+    init(name : String, distance : Double, closePost : Bool) {
         self.name = name
         self.distance = distance
+        self.closePost = closePost
     }
 }
 
@@ -32,7 +34,6 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var trendingSelected = true
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    var imageIncludes = true
     
     
     //some sample data to populate the tableview
@@ -47,7 +48,7 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         initialLoad = true
         
          //for testing only
-        self.updates = [Update(name : "Will", distance: 2.0), Update(name : "Georgy", distance : 5.1), Update(name : "Bryce", distance : 1.1), Update(name: "Gera", distance : 0.4)]
+        self.updates = [Update(name : "Will", distance: 2.0, closePost : false), Update(name : "Georgy", distance : 5.1, closePost : false), Update(name : "Bryce", distance : 1.1, closePost : false), Update(name: "Gera", distance : 0.4, closePost : false)]
         
         self.updatesWithPost.sort(by: { s1, s2 in return currentLocation.distance(from: CLLocation(latitude: s1.location[0], longitude: s1.location[1])) < currentLocation.distance(from: CLLocation(latitude: s2.location[0], longitude: s2.location[1]))})
         
@@ -83,7 +84,8 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.updates = []
         for post in updatesWithPost {
             let distance = self.currentLocation.distance(from: CLLocation(latitude: post.location[0], longitude: post.location[1]))
-            let newUpdate = Update(name : post.author as String, distance: distance)
+            let isClose = distance <= 200
+            let newUpdate = Update(name : post.author as String, distance: distance, closePost : isClose)
             
             self.updates.append(newUpdate)
         }
@@ -199,7 +201,7 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.dequeueReusableCell(withIdentifier: "trendingCell", for: indexPath) as! StatusTableViewCell
         
         // initial value
-        var currentUpdate = Update(name:"",distance:0)
+        var currentUpdate = Update(name : "", distance : 0, closePost : false)
         
         if self.trendingSelected {
             currentUpdate = updates[indexPath.row]
@@ -209,19 +211,31 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if currentUpdate.favorite {
             cell.trendingCellIcon.image = UIImage(named: "yellow_star.png")
         }
-        cell.trendingCellTextField.text = "\(currentUpdate.name) made a post \(currentUpdate.distance) miles from you."
+        
+        //TODO: need to check if it works!
+        if currentUpdate.closePost {
+            cell.backgroundColor = UIColor.red
+        } else if (currentUpdate.distance > 200 && currentUpdate.distance < 400 ) {
+            cell.backgroundColor = UIColor.lightGray
+        } else {
+            cell.backgroundColor = UIColor.blue
+        }
+        
+        
+        cell.trendingCellTextField.text = "\(currentUpdate.name) made a post \(currentUpdate.distance) meters from you."
         return cell
     }
     
     // Perform the segue when a row is tapped
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("Row Selected")
-        if imageIncludes {
-            performSegue(withIdentifier: "includesImage", sender: self)
-        } else {
-            performSegue(withIdentifier: "textOnly", sender: self)
-        }
         
+        let currentUpdate = updates[indexPath.row]
+        
+        // if close enough to view post, allow segue
+        if currentUpdate.closePost{
+            performSegue(withIdentifier: "includesImage", sender: self)
+        }
     }
     
     // MARK: - handle segues
