@@ -12,6 +12,9 @@ import Firebase
 
 class ViewPostViewController: UIViewController {
     var post: Post = Post(author: "", time: 0, type: Post.PostType.text, text: "", url: "", location: [0.0,0.0], marker: "")
+    
+    
+    @IBOutlet weak var statusIndicator: UIActivityIndicatorView!
 
     @IBOutlet weak var setTitle: UILabel!
     @IBOutlet weak var textView: UITextView!
@@ -19,6 +22,7 @@ class ViewPostViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        statusIndicator.hidesWhenStopped = true
         
         // Do any additional setup after loading the view.
         self.setTitle.text = (self.post.author as String) + " 's post"
@@ -31,7 +35,14 @@ class ViewPostViewController: UIViewController {
         
         if self.post.type == .image {
             print("\nThis post has an image! Downloading....\n")
-            self.downloadImage(newPost: self.post, storageRef: storageRef)
+            
+            DispatchQueue.main.async {
+                self.statusIndicator.isHidden = false
+                self.statusIndicator.startAnimating() // launch the status indicator
+                
+                // must do this next asynch
+                self.downloadImage(newPost: self.post, storageRef: storageRef)
+            }
         }
     }
     
@@ -48,6 +59,7 @@ class ViewPostViewController: UIViewController {
                 print("\nImage downloaded successfully!!\n)")
                 // Data for "images/island.jpg" is returned
                 self.imageView.image = UIImage(data: data!)
+                self.statusIndicator.stopAnimating() // launch the status indicator
             }
         }
     }

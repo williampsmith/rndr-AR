@@ -23,6 +23,7 @@ class Update {
 }
 
 class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, DataManagerDelegate, CLLocationManagerDelegate {
+    @IBOutlet weak var statusIndicator: UIActivityIndicatorView!
     
     var initialLoad = true // ensures location updates do not continuously call DataManager delegates
     
@@ -46,6 +47,13 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.viewDidLoad()
         
         initialLoad = true
+        statusIndicator.hidesWhenStopped = true
+        
+        // load the status indicator and start animation
+        DispatchQueue.main.async {
+            self.statusIndicator.isHidden = false
+            self.statusIndicator.startAnimating() // launch the status indicator
+        }
         
          //for testing only
         self.updates = [Update(name : "Will", distance: 2.0, closePost : false), Update(name : "Georgy", distance : 5.1, closePost : false), Update(name : "Bryce", distance : 1.1, closePost : false), Update(name: "Gera", distance : 0.4, closePost : false)]
@@ -170,6 +178,7 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         syncTwoUpdate()
         self.tableView.reloadData()
+        self.statusIndicator.stopAnimating() // launch the status indicator
     }
     
     
