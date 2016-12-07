@@ -237,7 +237,7 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             // Get the destination view controller and set its movie property
             let detailController = segue.destination as! ViewPostViewController
-            detailController.post = selectedPost.author as String!
+            detailController.post = selectedPost
         }
     }
   
