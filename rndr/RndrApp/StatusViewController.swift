@@ -32,21 +32,27 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var trendingSelected = true
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    var imageIncludes = true
     
     
     //some sample data to populate the tableview
     var updates : [Update] = []
     var savedPosts = [Update]() //will save removed posts from discover tab
+    var updatesWithPost : [Post] = []
+    var savedPostsWithPost = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         initialLoad = true
         
-        // for testing only
+         //for testing only
         self.updates = [Update(name : "Will", distance: 2.0), Update(name : "Georgy", distance : 5.1), Update(name : "Bryce", distance : 1.1), Update(name: "Gera", distance : 0.4)]
         
-        self.updates.sort(by: { s1, s2 in return s1.distance < s2.distance})
+        self.updatesWithPost.sort(by: { s1, s2 in return currentLocation.distance(from: CLLocation(latitude: s1.location[0], longitude: s1.location[1])) < currentLocation.distance(from: CLLocation(latitude: s2.location[0], longitude: s2.location[1]))})
+        
+        //sync two update list
+        syncTwoUpdate()
 
         dataManager.delegate = self
         locationManager.delegate = self
@@ -69,6 +75,17 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         else {
             print("\n\nError: Not authorized to retrieve location data. Using default location for post retrieval.\n\n")
             self.dataManager.retrieveNearbyPosts()
+        }
+    }
+    
+    // This function will sync two updates
+    func syncTwoUpdate() {
+        self.updates = []
+        for post in updatesWithPost {
+            let distance = self.currentLocation.distance(from: CLLocation(latitude: post.location[0], longitude: post.location[1]))
+            let newUpdate = Update(name : post.author as String, distance: distance)
+            
+            self.updates.append(newUpdate)
         }
     }
 
@@ -109,6 +126,7 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             self.tableView.reloadData()
         }
+        
         favorite.backgroundColor = UIColor.orange
     
         //remove button actions
@@ -116,17 +134,21 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
             print("Remove Post button tapped")
             if self.trendingSelected {
                 self.updates.remove(at: indexPath.row)
+                self.updatesWithPost.remove(at: indexPath.row)
             } else {
                 self.savedPosts.remove(at: indexPath.row)
+                self.savedPostsWithPost.remove(at: indexPath.row)
             }
             self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         }
+        
         remove.backgroundColor = UIColor.red
         
         //save button actions (only for trending tableview)
         let save = UITableViewRowAction(style: .normal, title: "Save") { action, index in
             print("Save button tapped, moved obj to saved list")
             self.savedPosts.append(self.updates.remove(at: indexPath.row))
+            self.savedPostsWithPost.append(self.updatesWithPost.remove(at: indexPath.row))
             self.tableView.deleteRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
                 
         }
@@ -139,22 +161,12 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
     }
     
-    func getDistance(location : [Double]) -> Double {
-        // Jhalak: Please implement this. Simply returns the distance between current location and provided location. Current location is already accessible by self.currentLocation
-        
-        return 1.0 // default value
-    }
     
     func didRetrieveNearbyPosts(sender: DataManager) {
-        self.updates = []
+        self.updatesWithPost = dataManager.nearbyPosts
+        self.updatesWithPost.sort(by: { s1, s2 in return currentLocation.distance(from: CLLocation(latitude: s1.location[0], longitude: s1.location[1])) < currentLocation.distance(from: CLLocation(latitude: s2.location[0], longitude: s2.location[1]))})
         
-        for var post in dataManager.nearbyPosts {
-            let distance = self.getDistance(location: post.location)
-            let newUpdate = Update(name : post.author as String, distance: distance)
-            
-            self.updates.append(newUpdate)
-        }
-        self.updates.sort(by: { s1, s2 in return s1.distance < s2.distance})
+        syncTwoUpdate()
         self.tableView.reloadData()
     }
     
@@ -169,8 +181,6 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         // you need to implement this method too or you can't swipe to display the actions
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if trendingSelected {
@@ -203,6 +213,34 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
+    // Perform the segue when a row is tapped
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Row Selected")
+        if imageIncludes {
+            performSegue(withIdentifier: "includesImage", sender: self)
+        } else {
+            performSegue(withIdentifier: "textOnly", sender: self)
+        }
+        
+    }
+    
+    // MARK: - handle segues
+    
+    // Prepare for Segue
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "includesImage" {
+            // Get the selected Post, by asking the table which row is selected
+            let selectedRow = tableView.indexPathForSelectedRow!.row
+            let selectedPost = self.updatesWithPost[selectedRow]
+            print("inside prepare \(selectedPost.author)")
+            
+            // Get the destination view controller and set its movie property
+            let detailController = segue.destination as! ViewPostViewController
+            detailController.post = selectedPost.author as String!
+        }
+    }
+  
     // Mark: CLLocationManagerDelegate methods
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

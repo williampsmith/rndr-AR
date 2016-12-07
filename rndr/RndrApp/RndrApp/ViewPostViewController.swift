@@ -9,11 +9,20 @@
 import UIKit
 
 class ViewPostViewController: UIViewController {
+    var post: String!
+
+    @IBOutlet weak var setTitle: UILabel!
+    @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var imageView: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        self.setTitle.text = self.post + " 's post"
+        self.imageView.image = nil
+        self.textView.text = "get something here"
+
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -21,6 +30,9 @@ class ViewPostViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func doneButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation
@@ -31,5 +43,7 @@ class ViewPostViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+
+
 
 }
