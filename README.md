@@ -14,6 +14,9 @@
 	feature, RNDR supports Augmented Reality, allowing posts to be as 3D objects
 	embedded in the camera view, however support for this is currently limited.
 
+	[Frontend Demo Link](https://youtu.be/R-x-eO138Xw)
+	[Augmented Reality Demo Link](https://youtu.be/b8fywEQZPy4)
+
 ## Features
 * Discovery view for viewing posts nearby.
 * Map view for navigating to post locations.
