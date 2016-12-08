@@ -45,9 +45,11 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         initialLoad = true
+        
         statusIndicator.hidesWhenStopped = true
+        self.statusIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
+        self.statusIndicator.color = UIColor.darkGray
         
         // load the status indicator and start animation
         DispatchQueue.main.async {

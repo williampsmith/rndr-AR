@@ -23,6 +23,8 @@ class ViewPostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         statusIndicator.hidesWhenStopped = true
+        self.statusIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.whiteLarge
+        statusIndicator.color = UIColor.darkGray
         
         // Do any additional setup after loading the view.
         self.setTitle.text = (self.post.author as String) + " 's post"
