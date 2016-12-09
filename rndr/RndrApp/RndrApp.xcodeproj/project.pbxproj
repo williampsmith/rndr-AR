@@ -34,6 +34,7 @@
 		3D1BC32A1DF6BF2F00DD5D5F /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4BD1DD7DC2C0062D4F5 /* Post.swift */; };
 		3D1BC32B1DF6C93400DD5D5F /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4B91DD7CD600062D4F5 /* StatusViewController.swift */; };
 		3D1BC32C1DF6C93500DD5D5F /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D09A4B91DD7CD600062D4F5 /* StatusViewController.swift */; };
+		3D9E16CF1DFA356E00E7AEEC /* rndr_logo_2.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D9E16CE1DFA356E00E7AEEC /* rndr_logo_2.png */; };
 		3DD898CF1DF8EF7300155299 /* RndrLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 3DD898CE1DF8EF7300155299 /* RndrLogo.png */; };
 		6A19546B1DF1266500CFC571 /* ViewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A19546A1DF1266500CFC571 /* ViewPostViewController.swift */; };
 		6A19546C1DF1266500CFC571 /* ViewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A19546A1DF1266500CFC571 /* ViewPostViewController.swift */; };
@@ -109,6 +110,7 @@
 		3D09A4C31DD8023A0062D4F5 /* StatusTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatusTableViewCell.swift; path = ../StatusTableViewCell.swift; sourceTree = "<group>"; };
 		3D09A4C51DD823760062D4F5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3D09A4D31DD87E1F0062D4F5 /* ExplorerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExplorerViewController.swift; sourceTree = "<group>"; };
+		3D9E16CE1DFA356E00E7AEEC /* rndr_logo_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rndr_logo_2.png; sourceTree = "<group>"; };
 		3DD898CE1DF8EF7300155299 /* RndrLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RndrLogo.png; sourceTree = "<group>"; };
 		6A19546A1DF1266500CFC571 /* ViewPostViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPostViewController.swift; sourceTree = "<group>"; };
 		6A19546E1DF1328300CFC571 /* trending_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trending_icon.png; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 				3D09A4BF1DD7DCBC0062D4F5 /* DataManager.swift */,
 				3D09A4BD1DD7DC2C0062D4F5 /* Post.swift */,
 				3D09A4761DD7A93C0062D4F5 /* Assets.xcassets */,
+				3D9E16CE1DFA356E00E7AEEC /* rndr_logo_2.png */,
 				3DD898CE1DF8EF7300155299 /* RndrLogo.png */,
 				6A19548E1DF3577900CFC571 /* create_post@1x.png */,
 				6A1954941DF3581800CFC571 /* discover_tab@1x.png */,
@@ -404,6 +407,7 @@
 				6AD052801DF0A6FE00DCBD5E /* defaultphoto.png in Resources */,
 				6A19548B1DF356D800CFC571 /* explore_tab@1x.png in Resources */,
 				3D09A4AC1DD7B2C50062D4F5 /* friends.png in Resources */,
+				3D9E16CF1DFA356E00E7AEEC /* rndr_logo_2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

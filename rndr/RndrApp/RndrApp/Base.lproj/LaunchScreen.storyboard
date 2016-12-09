@@ -21,17 +21,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="RndrLogo.png" translatesAutoresizingMaskIntoConstraints="NO" id="vTa-Aa-Gjx">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="rndr_logo_2.png" translatesAutoresizingMaskIntoConstraints="NO" id="Tni-8e-rFp">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="vTa-Aa-Gjx" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="1py-OI-ekG"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="vTa-Aa-Gjx" secondAttribute="bottom" id="GrQ-k1-0K3"/>
-                            <constraint firstAttribute="trailing" secondItem="vTa-Aa-Gjx" secondAttribute="trailing" id="WIY-Oh-ly9"/>
-                            <constraint firstItem="vTa-Aa-Gjx" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="boU-js-a6a"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -40,6 +35,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="RndrLogo.png" width="1024" height="1024"/>
+        <image name="rndr_logo_2.png" width="373" height="659"/>
     </resources>
 </document>

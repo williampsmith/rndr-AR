@@ -34,7 +34,10 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        //4, 6, 22, 0.94
+//        self.view.backgroundColor = UIColor(red: 4 / 255.0, green: 6 / 255.0, blue: 22 / 255.0, alpha: 0.94)
+//        self.stackview.backgroundColor = UIColor(red: 4 / 255.0, green: 6 / 255.0, blue: 22 / 255.0, alpha: 0.54)
+//        
         initialLoad = true
         
         imagePicker.delegate = self
@@ -166,7 +169,7 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
         
         print("Location Lat and long: \(lat), \(lon)")
         
-        let newPost = Post(author : "William2", time : currentTime, type : Post.PostType.text, text: postTextField.text as NSString, url : "", location : currentLocation, marker : "William")
+        let newPost = Post(author : "William", time : currentTime, type : Post.PostType.text, text: postTextField.text as NSString, url : "", location : currentLocation, marker : "William")
         
         // handle images if neccesary
         if postImageView.image == nil {
@@ -292,7 +295,7 @@ class CreateViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBAction func importPhotoButtonPressed(_ sender: Any) {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.photoLibrary) {
             imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary;
-            imagePicker.allowsEditing = true
+            imagePicker.allowsEditing = true // reactivate if we weant to crop
             self.present(imagePicker, animated: true, completion: nil)
         }
     }

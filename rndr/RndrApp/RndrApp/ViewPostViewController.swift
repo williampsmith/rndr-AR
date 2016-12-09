@@ -27,7 +27,7 @@ class ViewPostViewController: UIViewController {
         statusIndicator.color = UIColor.darkGray
         
         // Do any additional setup after loading the view.
-        self.setTitle.text = (self.post.author as String) + " 's post"
+        self.setTitle.text = (self.post.author as String) + " 's Post"
         self.textView.text = post.text as String
         
         self.textView.font = UIFont(name: self.textView!.font!.fontName, size: 18)

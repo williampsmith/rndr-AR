@@ -225,13 +225,14 @@ class StatusViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         //TODO: need to check if it works!
         if currentUpdate.closePost {
-            cell.backgroundColor = UIColor(red: 1.0, green: 51 / 255, blue: 51 / 255, alpha: 0.8)
+            cell.backgroundColor = UIColor(red: 0.988, green: 0.459, blue: 0.427, alpha: 1.0)
+            //cell.backgroundColor = UIColor(red: 1.0, green: 51 / 255, blue: 51 / 255, alpha: 0.8)
         } else {
             cell.backgroundColor = UIColor.lightGray
         }
         
         
-        cell.trendingCellTextField.text = "\(currentUpdate.name) made a post \(currentUpdate.distance) meters from you."
+        cell.trendingCellTextField.text = "\(currentUpdate.name) made a post \(Int(currentUpdate.distance)) meters from you."
         return cell
     }
     
